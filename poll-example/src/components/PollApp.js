@@ -10,7 +10,6 @@ function PollApp() {
   const addQuestion = async () => {
     const newPoll = {
       question: newQuestion,
-      choices: [],
     };
     const docRef = await addDoc(collection(db, "polls"), newPoll);
     setNewQuestion("");
@@ -18,17 +17,31 @@ function PollApp() {
     console.log("Document written with ID: ", docRef.id);
     setPolls((oldArray) => [...oldArray, newPoll]);
   };
-  const fetchPolls = async () => {
-    await getDocs(collection(db, "polls")).then((querySnapshot) => {
-      const newData = querySnapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      setPolls(newData);
-      console.log(polls, newData);
-    });
+
+  const fetchChoices = async (poll_id) => {
+    const querySnapshot = await getDocs(
+      collection(db, "polls", poll_id, "choices")
+    );
+    console.log(querySnapshot);
+    return querySnapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
   };
+
   useEffect(() => {
+    const fetchPolls = async () => {
+      const querySnapshot = await getDocs(collection(db, "polls"));
+      const newData = await Promise.all(
+        querySnapshot.docs.map(async (doc) => ({
+          ...doc.data(),
+          id: doc.id,
+          choices: await fetchChoices(doc.id),
+        }))
+      );
+      setPolls(newData);
+      console.log(newData);
+    };
     fetchPolls();
   }, []);
   return (

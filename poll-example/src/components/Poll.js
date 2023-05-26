@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
 import Options from "./Options";
-import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import { db } from "../firebase";
 
 function Poll({ poll_information }) {
-  const [choices, setChoices] = useState(poll_information?.choices);
-  const pollRef = doc(db, "polls", poll_information.id);
+  const [choices, setChoices] = useState(poll_information.choices);
+  // const pollRef = doc(db, "polls", poll_information.id);
   const handleChoice = async (text) => {
     const newChoice = { text: text, downvotes: 0, upvotes: 0 };
-    await updateDoc(pollRef, {
-      choices: arrayUnion(newChoice),
-    });
+    const docRef = await addDoc(
+      collection(db, "polls", poll_information.id, "choices"),
+      newChoice
+    );
+    newChoice.id = docRef.id;
+    console.log("Document written with ID: ", docRef.id);
     setChoices((oldArray) => [...oldArray, newChoice]);
   };
   return (
@@ -19,7 +22,11 @@ function Poll({ poll_information }) {
       <Typography variant="h4" align="left">
         {poll_information.question}
       </Typography>
-      <Options choices={poll_information.choices} onAddChoice={handleChoice} />
+      <Options
+        choices={choices}
+        onAddChoice={handleChoice}
+        question_id={poll_information.id}
+      />
     </>
   );
 }
