@@ -6,7 +6,7 @@ import { TextField, Typography, Button } from "@mui/material";
 function PollApp() {
   const [polls, setPolls] = useState([]);
   const [newQuestion, setNewQuestion] = useState("");
-  //https://www.freecodecamp.org/news/how-to-use-the-firebase-database-in-react/
+  //www.freecodecamp.org/news/how-to-use-the-firebase-database-in-react/
   const addQuestion = async () => {
     const newPoll = {
       question: newQuestion,
@@ -14,7 +14,7 @@ function PollApp() {
     };
     const docRef = await addDoc(collection(db, "polls"), newPoll);
     setNewQuestion("");
-    newPoll.id = docRef;
+    newPoll.id = docRef.id;
     console.log("Document written with ID: ", docRef.id);
     setPolls((oldArray) => [...oldArray, newPoll]);
   };

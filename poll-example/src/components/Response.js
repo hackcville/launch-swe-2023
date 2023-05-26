@@ -4,11 +4,9 @@ import { IconButton, Typography, TextField, Button } from "@mui/material";
 
 import { db } from "../firebase";
 import { doc, updateDoc, increment } from "firebase/firestore";
-import { useState } from "react";
 
 function Response({ data }) {
   const netVotes = data.upvotes - data.downvotes;
-  const [newResponse, setNewResponse] = useState("");
   return (
     <div style={{ display: "flex", flex: "row" }}>
       <div style={{ display: "flex", flex: "row" }}>
