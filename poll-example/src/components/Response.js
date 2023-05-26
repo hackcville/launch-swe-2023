@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import { IconButton, Typography, TextField, Button } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
 
 import { db } from "../firebase";
 import { doc, increment, updateDoc } from "firebase/firestore";
