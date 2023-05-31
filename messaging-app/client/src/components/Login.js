@@ -13,6 +13,7 @@ function Login({ onSubmit }) {
             variant="outlined"
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
+            required
           ></TextField>
         </Box>
         <Box>
